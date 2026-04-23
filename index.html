@@ -6,7 +6,6 @@
 <title>Nesrine Brand1</title>
 
 <style>
-
 *{
 box-sizing:border-box;
 margin:0;
@@ -16,6 +15,7 @@ font-family:Arial;
 
 body{
 background:#f5f5f5;
+direction: rtl;
 }
 
 header{
@@ -84,6 +84,7 @@ padding:15px;
 display:none;
 overflow:auto;
 box-shadow:-5px 0 10px rgba(0,0,0,0.2);
+z-index:9999;
 }
 
 input,select{
@@ -96,7 +97,6 @@ margin:5px 0;
 font-weight:bold;
 margin-top:10px;
 }
-
 </style>
 </head>
 
@@ -157,31 +157,24 @@ margin-top:10px;
 <script>
 
 let products = [
-{name:"عبايه نور",price:1000,img:"https://i.postimg.cc/bw9L4Qhq/Whats-App-Image-2026-04-23-at-21-33-35.jpg"},
+{name:"عبايه نور",price:1000,img:"https://i.postimg.cc/bw9L4Qhq/Whats-App-Image.jpg"},
 {name:"عباية فخم",price:450,img:"https://i.postimg.cc/1RHNwJsq/177777.jpg"},
 {name:"عباية صيفية",price:250,img:"https://i.postimg.cc/1RjskqHh/377777.jpg"},
 {name:"عباية خليجية",price:380,img:"https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400"},
 {name:"عباية مطرزة",price:500,img:"https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400"},
-{name:"عباية بسيطة",price:220,img:"https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400"},
-{name:"عباية كلاس",price:410,img:"https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?w=400"},
-{name:"عباية يومية",price:199,img:"https://images.unsplash.com/photo-1520975682031-a7c6d5f5f3f5?w=400"},
-{name:"عباية سوداء فخمة",price:600,img:"https://images.unsplash.com/photo-1519741497674-611481863552?w=400"},
-{name:"عباية عصرية",price:340,img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400"},
-{name:"عباية رمضانية",price:370,img:"https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=400"},
-{name:"عباية ملكية",price:800,img:"https://images.unsplash.com/photo-1520975918317-3c7e7c3f9a52?w=400"},
-{name:"عباية خفيفة",price:180,img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400"},
-{name:"عباية ناعمة",price:260,img:"https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?w=400"},
-{name:"عباية جديدة",price:300,img:"https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=400"}
+{name:"عباية بسيطة",price:220,img:"https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400"}
 ];
 
 let cart=[];
+
 let container=document.getElementById("products");
+
 let html="";
 
 products.forEach(p=>{
 html+=`
 <div class="card">
-<img loading="lazy" src="${p.img}">
+<img src="${p.img}">
 <h4>${p.name}</h4>
 <p>${p.price} درهم</p>
 <button onclick="add('${p.name}',${p.price})">إضافة للسلة</button>
@@ -197,7 +190,6 @@ update();
 }
 
 function update(){
-
 let items="";
 let total=0;
 
@@ -209,7 +201,6 @@ total+=i.price;
 document.getElementById("items").innerHTML=items;
 document.getElementById("total").innerText=total;
 document.getElementById("count").innerText=cart.length;
-
 }
 
 function toggleCart(){
@@ -219,15 +210,15 @@ c.style.display=c.style.display=="block"?"none":"block";
 
 function send(){
 
-let owner="2120614986795";
+let owner="212612345678";
 
-let name=document.getElementById("name").value;
-let phone=document.getElementById("phone").value;
-let address=document.getElementById("address").value;
-let shipping=document.getElementById("shipping").value;
+let name=document.getElementById("name").value.trim();
+let phone=document.getElementById("phone").value.trim();
+let address=document.getElementById("address").value.trim();
+let city=document.getElementById("city").value;
 
 if(!name||!phone||!address){
-alert("عمر المعلومات");
+alert("عمر جميع المعلومات");
 return;
 }
 
@@ -236,32 +227,27 @@ alert("السلة فارغة");
 return;
 }
 
-let shippingCost=shippingPrices[shipping];
-
-let msg="طلب جديد%0A%0A";
-
-msg+="الاسم: "+name+"%0A";
-msg+="الهاتف: "+phone+"%0A";
-msg+="العنوان: "+address+"%0A";
-msg+="الشحن: "+shipping+" "+shippingCost+" درهم%0A%0A";
+let msg="طلب جديد\n\n";
+msg+="الاسم: "+name+"\n";
+msg+="الهاتف: "+phone+"\n";
+msg+="العنوان: "+address+"\n";
+msg+="المدينة: "+city+"\n\n";
 
 let total=0;
 
 cart.forEach(i=>{
-msg+="- "+i.name+" "+i.price+" درهم%0A";
+msg+="- "+i.name+" "+i.price+" درهم\n";
 total+=i.price;
 });
 
-total+=shippingCost;
+msg+="\nالمجموع: "+total+" درهم";
 
-msg+="%0Aالمجموع: "+total+" درهم";
-
-window.open("https://wa.me/"+owner+"?text="+msg);
+window.location.href =
+"https://wa.me/"+owner+"?text="+encodeURIComponent(msg);
 
 cart=[];
 update();
 toggleCart();
-
 }
 
 </script>
