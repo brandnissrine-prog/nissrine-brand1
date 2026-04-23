@@ -6,6 +6,7 @@
 <title>Nesrine Brand1</title>
 
 <style>
+
 *{
 box-sizing:border-box;
 margin:0;
@@ -18,6 +19,7 @@ background:#f5f5f5;
 direction: rtl;
 }
 
+/* ===== HEADER ===== */
 header{
 background:black;
 color:white;
@@ -39,6 +41,62 @@ height:35px;
 border-radius:50%;
 }
 
+.header-actions{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.insta-btn{
+background:#E1306C;
+color:white;
+padding:5px 10px;
+border-radius:6px;
+text-decoration:none;
+font-size:12px;
+}
+
+/* ===== BANNER ===== */
+.banner{
+width:100%;
+height:220px;
+background-image:url("c:\Users\Nissrine zibar\Downloads\Gemini_Generated_Image_fs5cvbfs5cvbfs5c.png");
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+margin-bottom:10px;
+}
+
+.banner::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255, 0, 150, 0.4);
+}
+.banner-text{
+position:relative;
+color:white;
+text-align:center;
+z-index:1;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+0%{opacity:0;transform:translateY(25px);}
+100%{opacity:1;transform:translateY(0);}
+}
+
+.banner-text h2{animation:fadeUp 1s ease-in-out;}
+.banner-text p{animation:fadeUp 1.5s ease-in-out;}
+.banner-text button{animation:fadeUp 2s ease-in-out;}
+
+/* ===== PRODUCTS ===== */
 .products{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -72,6 +130,7 @@ border-radius:6px;
 cursor:pointer;
 }
 
+/* ===== CART ===== */
 .cart{
 position:fixed;
 top:0;
@@ -97,24 +156,65 @@ margin:5px 0;
 font-weight:bold;
 margin-top:10px;
 }
+
+.remove{
+width:auto;
+padding:3px 8px;
+background:red;
+border:none;
+border-radius:5px;
+margin-right:10px;
+cursor:pointer;
+color:white;
+}
+
+.buy-btn{
+background:green;
+margin-top:10px;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- ===== HEADER ===== -->
 <header>
+
 <div class="logo">
 <img src="c:\Users\Nissrine zibar\Downloads\Gemini_Generated_Image_27v39i27v39i27v3.png">
 <span>Nesrine Brand1</span>
 </div>
 
+<div class="header-actions">
+
+<a href="https://www.instagram.com/nissrine_brand1?igsh=MXU1MHFpNGZzcTJjaA%3D%3D&utm_source=qr" target="_blank" class="insta-btn">
+Instagram
+</a>
+
 <button onclick="toggleCart()">
 🛒 (<span id="count">0</span>)
 </button>
+
+</div>
+
 </header>
 
+<!-- ===== BANNER ===== -->
+<div class="banner">
+<div class="banner-text">
+<h2>مرحبا بك في Nesrine Brand1</h2>
+<p>أجمل العبايات بأثمنة مناسبة وجودة عالية</p>
+<button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+تسوق الآن
+</button>
+</div>
+</div>
+
+<!-- ===== PRODUCTS ===== -->
 <div class="products" id="products"></div>
 
+<!-- ===== CART ===== -->
 <div class="cart" id="cart">
 
 <h3>السلة</h3>
@@ -149,7 +249,11 @@ margin-top:10px;
 <option value="العيون">العيون</option>
 </select>
 
-<button onclick="send()">تأكيد الطلب</button>
+<!-- زر الشراء الجديد -->
+<button class="buy-btn" onclick="send()">
+اضغط هنا للشراء
+</button>
+
 <button onclick="toggleCart()">إغلاق</button>
 
 </div>
@@ -167,6 +271,7 @@ let products = [
 
 let cart=[];
 
+/* ===== PRODUCTS ===== */
 let container=document.getElementById("products");
 
 let html="";
@@ -184,17 +289,31 @@ html+=`
 
 container.innerHTML=html;
 
+/* ===== ADD ===== */
 function add(name,price){
 cart.push({name,price});
 update();
 }
 
+/* ===== REMOVE ===== */
+function removeItem(index){
+cart.splice(index,1);
+update();
+}
+
+/* ===== UPDATE ===== */
 function update(){
+
 let items="";
 let total=0;
 
-cart.forEach(i=>{
-items+=`<p>${i.name} - ${i.price} درهم</p>`;
+cart.forEach((i,index)=>{
+items+=`
+<p>
+${i.name} - ${i.price} درهم
+<button class="remove" onclick="removeItem(${index})">حذف</button>
+</p>
+`;
 total+=i.price;
 });
 
@@ -203,14 +322,16 @@ document.getElementById("total").innerText=total;
 document.getElementById("count").innerText=cart.length;
 }
 
+/* ===== CART ===== */
 function toggleCart(){
 let c=document.getElementById("cart");
 c.style.display=c.style.display=="block"?"none":"block";
 }
 
+/* ===== SEND ===== */
 function send(){
 
-let owner="212614986795";
+let owner="212612345678";
 
 let name=document.getElementById("name").value.trim();
 let phone=document.getElementById("phone").value.trim();
