@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجر العبايات</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial;
+}
+
+body{
+background:#f5f5f5;
+}
+
+header{
+background:black;
+color:white;
+padding:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.logo img{
+width:35px;
+height:35px;
+border-radius:50%;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:white;
+padding:8px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card img{
+width:100%;
+height:160px;
+object-fit:cover;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:8px;
+margin-top:5px;
+background:black;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.cart{
+position:fixed;
+top:0;
+right:0;
+width:90%;
+max-width:320px;
+height:100%;
+background:white;
+padding:15px;
+display:none;
+overflow:auto;
+box-shadow:-5px 0 10px rgba(0,0,0,0.2);
+}
+
+input,select{
+width:100%;
+padding:8px;
+margin:5px 0;
+}
+
+.total{
+font-weight:bold;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">
+<img src="https://via.placeholder.com/40">
+<span>متجر العبايات</span>
+</div>
+
+<button onclick="toggleCart()">
+🛒 (<span id="count">0</span>)
+</button>
+</header>
+
+<div class="products" id="products"></div>
+
+<div class="cart" id="cart">
+
+<h3>السلة</h3>
+
+<div id="items"></div>
+
+<p class="total">
+المجموع: <span id="total">0</span> درهم
+</p>
+
+<h4>معلومات الزبون</h4>
+
+<input id="name" placeholder="الاسم">
+<input id="phone" placeholder="الهاتف">
+<input id="address" placeholder="العنوان">
+
+<select id="shipping">
+<option value="الرباط">الرباط (20 درهم)</option>
+<option value="الدار البيضاء">الدار البيضاء (30 درهم)</option>
+<option value="مراكش">مراكش (40 درهم)</option>
+<option value="فاس">فاس (35 درهم)</option>
+<option value="طنجة">طنجة (50 درهم)</option>
+</select>
+
+<button onclick="send()">تأكيد الطلب</button>
+<button onclick="toggleCart()">إغلاق</button>
+
+</div>
+
+<script>
+
+let products = [
+{name:"عبايه مغربيه",price:1000,img:"https://i.postimg.cc/bw9L4Qhq/Whats-App-Image-2026-04-23-at-21-33-35.jpg"},
+{name:"عباية فخمة",price:450,img:"https://images.unsplash.com/photo-1593032465171-8f0b1b5b9c59?w=400"},
+{name:"عباية صيفية",price:250,img:"https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=400"},
+{name:"عباية خليجية",price:380,img:"https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400"},
+{name:"عباية مطرزة",price:500,img:"https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400"},
+{name:"عباية بسيطة",price:220,img:"https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400"},
+{name:"عباية كلاس",price:410,img:"https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?w=400"},
+{name:"عباية يومية",price:199,img:"https://images.unsplash.com/photo-1520975682031-a7c6d5f5f3f5?w=400"},
+{name:"عباية سوداء فخمة",price:600,img:"https://images.unsplash.com/photo-1519741497674-611481863552?w=400"},
+{name:"عباية عصرية",price:340,img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400"},
+{name:"عباية رمضانية",price:370,img:"https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=400"},
+{name:"عباية ملكية",price:800,img:"https://images.unsplash.com/photo-1520975918317-3c7e7c3f9a52?w=400"},
+{name:"عباية خفيفة",price:180,img:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400"},
+{name:"عباية ناعمة",price:260,img:"https://images.unsplash.com/photo-1521335629791-ce4aec67dd47?w=400"},
+{name:"عباية جديدة",price:300,img:"https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=400"}
+];
+
+let shippingPrices={
+"الرباط":20,
+"الدار البيضاء":30,
+"مراكش":40,
+"فاس":35,
+"طنجة":50
+};
+
+let cart=[];
+
+let container=document.getElementById("products");
+
+let html="";
+
+products.forEach(p=>{
+html+=`
+<div class="card">
+<img loading="lazy" src="${p.img}">
+<h4>${p.name}</h4>
+<p>${p.price} درهم</p>
+<button onclick="add('${p.name}',${p.price})">إضافة للسلة</button>
+</div>
+`;
+});
+
+container.innerHTML=html;
+
+function add(name,price){
+cart.push({name,price});
+update();
+}
+
+function update(){
+
+let items="";
+let total=0;
+
+cart.forEach(i=>{
+items+=`<p>${i.name} - ${i.price} درهم</p>`;
+total+=i.price;
+});
+
+document.getElementById("items").innerHTML=items;
+document.getElementById("total").innerText=total;
+document.getElementById("count").innerText=cart.length;
+
+}
+
+function toggleCart(){
+let c=document.getElementById("cart");
+c.style.display=c.style.display=="block"?"none":"block";
+}
+
+function send(){
+
+let owner="2120614986795";
+
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
+let address=document.getElementById("address").value;
+let shipping=document.getElementById("shipping").value;
+
+if(!name||!phone||!address){
+alert("عمر المعلومات");
+return;
+}
+
+if(cart.length==0){
+alert("السلة فارغة");
+return;
+}
+
+let shippingCost=shippingPrices[shipping];
+
+let msg="طلب جديد%0A%0A";
+
+msg+="الاسم: "+name+"%0A";
+msg+="الهاتف: "+phone+"%0A";
+msg+="العنوان: "+address+"%0A";
+msg+="الشحن: "+shipping+" "+shippingCost+" درهم%0A%0A";
+
+let total=0;
+
+cart.forEach(i=>{
+msg+="- "+i.name+" "+i.price+" درهم%0A";
+total+=i.price;
+});
+
+total+=shippingCost;
+
+msg+="%0Aالمجموع: "+total+" درهم";
+
+window.open("https://wa.me/"+owner+"?text="+msg);
+
+cart=[];
+update();
+toggleCart();
+
+}
+
+</script>
+
+</body>
+</html>
