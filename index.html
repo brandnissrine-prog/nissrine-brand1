@@ -131,12 +131,22 @@ margin-top:10px;
 <input id="phone" placeholder="الهاتف">
 <input id="address" placeholder="العنوان">
 
-<select id="shipping">
-<option value="الرباط">الرباط (20 درهم)</option>
-<option value="الدار البيضاء">الدار البيضاء (30 درهم)</option>
-<option value="مراكش">مراكش (40 درهم)</option>
-<option value="فاس">فاس (35 درهم)</option>
-<option value="طنجة">طنجة (50 درهم)</option>
+<select id="city">
+<option value="الدار البيضاء">الدار البيضاء</option>
+<option value="الرباط">الرباط</option>
+<option value="مراكش">مراكش</option>
+<option value="فاس">فاس</option>
+<option value="طنجة">طنجة</option>
+<option value="أكادير">أكادير</option>
+<option value="مكناس">مكناس</option>
+<option value="وجدة">وجدة</option>
+<option value="القنيطرة">القنيطرة</option>
+<option value="تطوان">تطوان</option>
+<option value="الجديدة">الجديدة</option>
+<option value="آسفي">آسفي</option>
+<option value="الناظور">الناظور</option>
+<option value="بني ملال">بني ملال</option>
+<option value="العيون">العيون</option>
 </select>
 
 <button onclick="send()">تأكيد الطلب</button>
@@ -164,18 +174,8 @@ let products = [
 {name:"عباية جديدة",price:300,img:"https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=400"}
 ];
 
-let shippingPrices={
-"الرباط":20,
-"الدار البيضاء":30,
-"مراكش":40,
-"فاس":35,
-"طنجة":50
-};
-
 let cart=[];
-
 let container=document.getElementById("products");
-
 let html="";
 
 products.forEach(p=>{
