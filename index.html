@@ -1038,7 +1038,33 @@ msg += `🏠 العنوان: ${address} %0A`;
 
 window.open("https://wa.me/212614986795?text="+msg);
 }
+function add(i){
 
+cart.push({
+name:products[i].name,
+price:products[i].price,
+color:selected[i]||"بدون لون"
+});
+
+update();
+
+/* 🔊 نفس صوت النجوم */
+let sound = document.getElementById("addSound");
+if(sound){
+sound.currentTime = 0;
+sound.play().catch(()=>{});
+}
+
+/* toast */
+let t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1500);
+
+/* bump */
+let c=document.getElementById("count");
+c.classList.add("bump");
+setTimeout(()=>c.classList.remove("bump"),300);
+}
 </script>
 <div class="help-box">
   ❓
