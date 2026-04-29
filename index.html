@@ -16,7 +16,12 @@ font-family:Arial;
 }
 
 body{
-background:#f6f6f6;
+background: linear-gradient(
+to bottom,
+#f6f6f6 0%,
+#e8d5c4 40%,
+#e8d5c4 100%
+);
 }
 
 /* ===== HEADER ===== */
@@ -67,13 +72,31 @@ border-radius:50%;
 
 /* 🛒 CART BUTTON */
 .cart-btn{
-background:#222;
+background:linear-gradient(45deg,#111,#333);
 color:white;
 border:none;
-padding:8px 12px;
-border-radius:20px;
+padding:10px 16px;
+border-radius:30px;
 cursor:pointer;
 position:relative;
+font-weight:bold;
+display:flex;
+align-items:center;
+gap:6px;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(0,0,0,0.4);
+}
+
+/* hover نفس واتساب */
+.cart-btn:hover{
+transform:translateY(-3px) scale(1.05);
+box-shadow:0 10px 25px rgba(0,0,0,0.6);
+background:linear-gradient(45deg,#000,#222);
+}
+
+/* click */
+.cart-btn:active{
+transform:scale(0.95);
 }
 
 /* badge */
@@ -94,15 +117,29 @@ transform:scale(1.4);
 .banner{
 width:100%;
 height:230px;
-background-image:url("https://images.unsplash.com/photo-1520975916090-3105956dac38?w=1200");
-background-size:cover;
-background-position:center;
+position:relative;
+overflow:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
-position:relative;
 }
 
+.banner-video{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:1;
+}
+
+.banner-text{
+position:relative;
+z-index:2;
+text-align:center;
+color:white;
+}
 
 .banhelp-box{
 position:fixed;
@@ -241,6 +278,20 @@ animation:fadeUp 1.5s ease forwards;
 animation-delay:0.5s;
 }
 
+.banner-text.left{
+text-align:left;
+position:relative;
+left:20px;
+right:auto;
+color:#000;
+}
+
+.banner-text.left h2,
+.banner-text.left p{
+color:#000 !important;
+text-shadow:none;
+}
+
 /* ✨ Glow + حركة */
 @keyframes glowText{
 0%{
@@ -336,21 +387,24 @@ background:#333;
 .cart{
 position:fixed;
 top:0;
-right:-100%;
+right:0;
 width:320px;
 height:100%;
 background:white;
 padding:12px;
 overflow:auto;
 box-shadow:-5px 0 20px rgba(0,0,0,0.2);
-transition:0.4s ease;
+
+/* ✨ animation */
+transform:translateX(100%) scale(0.95);
+opacity:0;
+transition:all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 z-index:9999;
 }
 
 .cart.open{
-right:0;
+transform:translateX(0) scale(1);
 opacity:1;
-transform:translateX(0);
 }
 
 
@@ -363,17 +417,46 @@ margin:5px 0;
 
 /* whatsapp */
 /* buttons داخل السلة */
-.cart button{
-width:100%;
+.card button{
+width:90%;
+margin:10px auto;
 padding:10px;
 border:none;
-background:#25D366;
+border-radius:25px;
+background:#111;
 color:white;
-border-radius:10px;
-margin-top:10px;
 cursor:pointer;
+transition:0.3s;
+}
+.card button:active{
+transform:scale(0.95);
 }
 
+.card button{
+position:relative;
+overflow:hidden;
+}
+
+.card button::after{
+content:"";
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:-100%;
+background:rgba(255,255,255,0.2);
+transition:0.4s;
+}
+
+.card button:hover::after{
+left:100%;
+}
+
+.card button:hover{
+transform:translateY(-5px) scale(1.08);
+box-shadow:0 10px 20px rgba(0,0,0,0.3);
+background:#333;
+}
 /* زر الإغلاق */
 .close-btn{
 background:#111 !important;
@@ -392,8 +475,19 @@ display:inline-block;
 margin-right:5px;
 }
 
-.cart .remove:hover{
-background:#333 !important;
+.cart button[style]{
+background:#ff3b30;
+transition:0.3s;
+}
+
+.cart button[style]:hover{
+transform:scale(1.05);
+opacity:0.9;
+}
+
+.card div{
+font-size:16px;
+color:#ffb400;
 }
 
 /* close */
@@ -469,11 +563,51 @@ box-shadow:0 0 0 0 rgba(255,255,255,0);
 }
 @keyframes cartBounce {
 0%   { transform: scale(1); }
-30%  { transform: scale(1.3); }
+30%  { transform: scale(1.25); }
 60%  { transform: scale(0.9); }
 100% { transform: scale(1); }
 }
 
+.cart-bounce{
+animation: cartBounce 0.4s ease;
+}
+@keyframes cartPop {
+0%{
+transform:translateX(100%) scale(0.9);
+}
+60%{
+transform:translateX(-10px) scale(1.03);
+}
+100%{
+transform:translateX(0) scale(1);
+}
+}
+
+.cart.open{
+animation:cartPop 0.4s ease;
+}
+.whatsapp-btn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#25D366,#1ebe5d);
+color:white;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(37,211,102,0.4);
+}
+
+.whatsapp-btn:hover{
+transform:translateY(-3px) scale(1.03);
+box-shadow:0 10px 25px rgba(37,211,102,0.6);
+}
+
+.whatsapp-btn:active{
+transform:scale(0.95);
+}
 .cart-bounce{
 animation: cartBounce 0.4s ease;
 }
@@ -528,6 +662,30 @@ text-decoration:none;
 .whatsapp{background:#25D366;}
 .share{background:#444;}
 
+.close-btn-2{
+width:100%;
+padding:12px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#111,#333);
+color:white;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(0,0,0,0.4);
+}
+
+.close-btn-2:hover{
+transform:translateY(-3px) scale(1.03);
+box-shadow:0 10px 25px rgba(0,0,0,0.6);
+background:linear-gradient(45deg,#000,#222);
+}
+
+.close-btn-2:active{
+transform:scale(0.95);
+}
+
 </style>
 </head>
 <audio id="addSound" src="assets/button-interface.mp3" preload="auto"></audio>
@@ -557,10 +715,18 @@ Instagram
 
 <!-- BANNER -->
 <div class="banner">
+
+<img 
+src="https://i.postimg.cc/J79rtgWB/d19f8c00-8186-4961-8e3e-d80116293cd1.png" 
+class="banner-video" 
+alt="banner image">
+
 <div class="banner-text">
 <h2>مرحبا بك</h2>
 <p>أجمل العبايات</p>
+
 </div>
+
 </div>
 
 <!-- PRODUCTS -->
@@ -613,8 +779,12 @@ Instagram
 <option>زاكورة</option>
 </select>
 
-<button onclick="send()">📲 إرسال واتساب</button>
-<button class="close-btn" onclick="toggleCart()">إغلاق</button>
+<button class="whatsapp-btn" onclick="send()">
+📲 تأكيد الطلب عبر واتساب
+</button>
+<button class="close-btn-2" onclick="toggleCart()">
+✖ إغلاق السلة
+</button>
 
 </div>
 
@@ -628,8 +798,12 @@ Instagram
 
 <div class="footer-links">
 
-<a class="social" href="#">📸 Instagram</a>
-<a class="social whatsapp" href="#">📲 WhatsApp</a>
+<a class="social" href="https://www.instagram.com/nissrine_brand1" target="_blank">
+📸 Instagram
+</a>
+<a class="social whatsapp" href="https://wa.me/212614986795" target="_blank">
+📲 WhatsApp
+</a>
 <button class="social share" onclick="share()">🔗 Share</button>
 
 </div>
@@ -639,28 +813,76 @@ Instagram
 <script>
 
 /* PRODUCTS */
-let products=[];
-for(let i=1;i<=15;i++){
-products.push({
-name:"عباية "+i,
-price:300+i*50,
-img:"https://images.unsplash.com/photo-1520975916090-3105956dac38?w=400",
-colors:["#000","#fff","#ff4d6d"]
-});
-}
+let products = [
+{ name:"عباية 1", price:350, img:"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg", colors:["#000","#fff"] },
+
+{ name:"عباية 2", price:420, img:"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg", colors:["#000","#fff"] },
+
+{ name:"عباية 3", price:390, img:"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg", colors:["#000","#ff4d6d"] },
+
+{ name:"عباية 4", price:450, img:"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg", colors:["#111","#fff"] },
+
+{ name:"عباية 5", price:500, img:"https://i.postimg.cc/Z5QVhrNK/fb37089c-677f-49a9-be8f-05962e1de119.jpg", colors:["#000","#ccc"] },
+
+{ name:"عباية 6", price:370, img:"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+
+{ name:"عباية 7", price:410, img:"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400", colors:["#000","#fff"] },
+
+{ name:"عباية 8", price:460, img:"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+
+{ name:"عباية 9", price:480, img:"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400", colors:["#111","#fff"] },
+
+{ name:"عباية 10", price:520, img:"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400", colors:["#000","#ccc"] },
+
+{ name:"عباية 11", price:390, img:"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+
+{ name:"عباية 12", price:430, img:"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400", colors:["#000","#fff"] },
+
+{ name:"عباية 13", price:470, img:"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400", colors:["#111","#fff"] },
+
+{ name:"عباية 14", price:490, img:"https://images.unsplash.com/photo-1520975878901-7a8b9c0d1e2f?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+
+{ name:"عباية 15", price:550, img:"https://images.unsplash.com/photo-1520975889012-8b9c0d1e2f3a?auto=format&fit=crop&w=400", colors:["#000","#fff"] }
+];
 
 let cart=[];
 let selected={};
 
+
 /* SHOW */
 let box=document.getElementById("products");
+let ratings = JSON.parse(localStorage.getItem("ratings")) || {};
+/* تأكد أن الصفحة تحمّلات قبل العرض */
+window.onload = function(){
+renderProducts();
+};
+function renderProducts(){
+
+let box=document.getElementById("products");
+if(!box) return; // حماية
+
+box.innerHTML="";
 
 products.forEach((p,i)=>{
-box.innerHTML+=`
+
+let userRate = ratings[i] || 0;
+
+let starsUI = "";
+for(let s=1; s<=5; s++){
+starsUI += `
+<span style="cursor:pointer;color:${s<=userRate?'#ffb400':'#ccc'}"
+onclick="rate(${i},${s})">★</span>
+`;
+}
+
+box.innerHTML += `
 <div class="card">
 
 <img src="${p.img}">
-<h4>${p.name}</h4>
+
+<div style="margin:8px 0;font-size:18px;">
+${starsUI}
+</div>
 
 <div class="colors-inline">
 ${p.colors.map(c=>`
@@ -676,6 +898,8 @@ onclick="pick(${i},'${c}',this)"></span>
 </div>`;
 });
 
+}
+
 /* COLOR */
 function pick(i,color,el){
 selected[i]=color;
@@ -685,6 +909,17 @@ document.querySelectorAll(".card")[i]
 .forEach(c=>c.classList.remove("active"));
 
 el.classList.add("active");
+}
+
+function rate(productId, value){
+
+ratings[productId] = value;
+localStorage.setItem("ratings", JSON.stringify(ratings));
+
+// إعادة رسم المنتجات باش يتحدّث الشكل (ولكن بدون ما نعرض تقييم عام)
+let box = document.getElementById("products");
+box.innerHTML = "";
+location.reload(); // أبسط حل لإعادة التحميل
 }
 
 /* ADD */
@@ -778,13 +1013,30 @@ url:location.href
 /* WHATSAPP */
 function send(){
 
-let msg="طلب جديد\n";
+if(cart.length === 0){
+alert("السلة فارغة 🛒");
+return;
+}
+
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+let address = document.getElementById("address").value;
+let city = document.getElementById("city").value;
+
+let msg = "🛍️ طلب جديد %0A";
+msg += "----------------------%0A";
 
 cart.forEach(i=>{
-msg+=i.name+" "+i.color+" "+i.price+"\n";
+msg += `• ${i.name} | ${i.color} | ${i.price} درهم %0A`;
 });
 
-window.open("https://wa.me/212614986795?text="+encodeURIComponent(msg));
+msg += "----------------------%0A";
+msg += `👤 الاسم: ${name} %0A`;
+msg += `📞 الهاتف: ${phone} %0A`;
+msg += `📍 المدينة: ${city} %0A`;
+msg += `🏠 العنوان: ${address} %0A`;
+
+window.open("https://wa.me/212614986795?text="+msg);
 }
 
 </script>
