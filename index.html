@@ -926,13 +926,19 @@ ${c}
 
 /* COLOR */
 function pick(i,color,el){
-selected[i]=color;
 
-document.querySelectorAll(".card")[i]
-.querySelectorAll(".color")
-.forEach(c=>c.classList.remove("active"));
+// نحفظ اللون الجديد
+selected[i] = color;
 
+// نحيّو active من نفس المنتج فقط
+let card = document.querySelectorAll(".card")[i];
+
+card.querySelectorAll(".color-text, .color")
+.forEach(c => c.classList.remove("active"));
+
+// ندير active للعنصر اللي ضغطتي عليه
 el.classList.add("active");
+
 }
 
 function rate(productId, value){
