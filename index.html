@@ -370,10 +370,29 @@ object-fit:cover;
 .colors-inline{
 display:flex;
 justify-content:center;
-gap:5px;
+gap:6px;
 margin:6px 0;
+flex-wrap:wrap;
 }
 
+.color-text{
+width:40px;
+height:22px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:15px;
+font-size:10px;
+cursor:pointer;
+border:1px solid #ddd;
+transition:0.3s;
+}
+
+.color-text:hover{
+transform:scale(1.05);
+background:#111;
+color:white;
+}
 .color{
 width:14px;
 height:14px;
@@ -838,37 +857,188 @@ alt="banner image">
 
 /* PRODUCTS */
 let products = [
-{ name:"عباية 1", price:350, img:"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg", colors:["أسود","أبيض"] },
 
-{ name:"عباية 2", price:420, img:"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg", colors:["أسود","أبيض"] },
+{
+name:"عباية 1",
+price:350,
+images:[
+"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
+"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
+"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg",
+"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 3", price:390, img:"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg", colors:["أسود","وردي"] },
+{
+name:"عباية 2",
+price:420,
+images:[
+"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
+"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
+"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg",
+"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 4", price:450, img:"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg", colors:["رمادي","أبيض"] },
+{
+name:"عباية 3",
+price:390,
+images:[
+"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg",
+"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
+"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
+"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 5", price:500, img:"https://i.postimg.cc/Z5QVhrNK/fb37089c-677f-49a9-be8f-05962e1de119.jpg", colors:["أسود","رمادي"] },
+{
+name:"عباية 4",
+price:450,
+images:[
+"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg",
+"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
+"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
+"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 6", price:370, img:"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400", colors:["أسود","وردي"] },
+{
+name:"عباية 5",
+price:500,
+images:[
+"https://i.postimg.cc/Z5QVhrNK/fb37089c-677f-49a9-be8f-05962e1de119.jpg",
+"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
+"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
+"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 7", price:410, img:"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400", colors:["أبيض","رمادي"] },
+{
+name:"عباية 6",
+price:370,
+images:[
+"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 8", price:460, img:"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400", colors:["أسود","أبيض"] },
+{
+name:"عباية 7",
+price:410,
+images:[
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 9", price:480, img:"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400", colors:["رمادي","أسود"] },
+{
+name:"عباية 8",
+price:460,
+images:[
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 10", price:520, img:"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400", colors:["أسود","أبيض"] },
+{
+name:"عباية 9",
+price:480,
+images:[
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 11", price:390, img:"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400", colors:["وردي","أبيض"] },
+{
+name:"عباية 10",
+price:520,
+images:[
+"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 12", price:430, img:"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400", colors:["أسود","رمادي"] },
+{
+name:"عباية 11",
+price:390,
+images:[
+"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 13", price:470, img:"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400", colors:["أبيض","أسود"] },
+{
+name:"عباية 12",
+price:430,
+images:[
+"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 14", price:490, img:"https://images.unsplash.com/photo-1520975878901-7a8b9c0d1e2f?auto=format&fit=crop&w=400", colors:["رمادي","وردي"] },
+{
+name:"عباية 13",
+price:470,
+images:[
+"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
 
-{ name:"عباية 15", price:550, img:"https://images.unsplash.com/photo-1520975889012-8b9c0d1e2f3a?auto=format&fit=crop&w=400", colors:["أسود","أبيض"] }
+{
+name:"عباية 14",
+price:490,
+images:[
+"https://images.unsplash.com/photo-1520975878901-7a8b9c0d1e2f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+},
+
+{
+name:"عباية 15",
+price:550,
+images:[
+"https://images.unsplash.com/photo-1520975889012-8b9c0d1e2f3a?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975878901-7a8b9c0d1e2f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400"
+],
+colors:["أسود","أبيض","وردي","رمادي"]
+}
+
 ];
-
 let cart=[];
 let selected={};
 
@@ -902,7 +1072,7 @@ onclick="rate(${i},${s})">★</span>
 box.innerHTML += `
 <div class="card">
 
-<img src="${p.img}">
+<img id="main-${i}" src="${p.images[0]}" class="main-img">
 
 <div style="margin:8px 0;font-size:18px;">
 ${starsUI}
@@ -915,9 +1085,39 @@ ${c}
 </span>
 `).join("")}
 </div>
+
 <p>${p.price} درهم</p>
 
-<button onclick="add(${i})">إضافة للسلة</button>
+<!-- BUTTONS -->
+<div style="display:flex;gap:5px;justify-content:space-between;align-items:center;padding:5px 10px;">
+
+<button onclick="openProduct(${i})" style="
+flex:1;
+padding:6px;
+font-size:12px;
+border-radius:20px;
+background:#444;
+color:white;
+border:none;
+cursor:pointer;
+">
+👁 عرض
+</button>
+
+<button onclick="add(${i})" style="
+flex:2;
+padding:8px;
+font-size:13px;
+border-radius:20px;
+background:#111;
+color:white;
+border:none;
+cursor:pointer;
+">
+🛒 إضافة
+</button>
+
+</div>
 
 </div>`;
 });
@@ -941,6 +1141,11 @@ el.classList.add("active");
 
 }
 
+function openProduct(i){
+localStorage.setItem("selectedProduct", JSON.stringify(products[i]));
+window.location.href = "product.html";
+}
+
 function rate(productId, value){
 
 ratings[productId] = value;
@@ -962,7 +1167,16 @@ color:selected[i]||"بدون لون"
 });
 
 update();
+function updateCartUI(){
 
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+document.getElementById("count").innerText = cart.length;
+}
+window.onload = function(){
+renderProducts();
+updateCartUI();
+};
 /* toast */
 let t=document.getElementById("toast");
 t.style.display="block";
@@ -1060,7 +1274,18 @@ let address = document.getElementById("address").value.trim();
 let city = document.getElementById("city").value;
 let totalOrders = localStorage.getItem("totalOrders") || 0;
 let totalSales = localStorage.getItem("totalSales") || 0;
+let hasMissingColor = false;
 
+cart.forEach(i=>{
+if(!i.color || i.color === "بدون لون"){
+hasMissingColor = true;
+}
+});
+
+if(hasMissingColor){
+alert("❌ خاصك تختار اللون قبل ما تكمل الطلب");
+return;
+}
 // ✅ التحقق من المعلومات
 if(name === ""){
 alert("❌ عفاك دخل الاسم");
