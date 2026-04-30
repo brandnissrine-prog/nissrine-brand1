@@ -86,7 +86,28 @@ gap:6px;
 transition:0.3s;
 box-shadow:0 5px 15px rgba(0,0,0,0.4);
 }
+.color-text{
+display:inline-block;
+padding:5px 10px;
+border:1px solid #ddd;
+border-radius:20px;
+font-size:12px;
+cursor:pointer;
+transition:0.3s;
+background:white;
+}
 
+.color-text:hover{
+background:#111;
+color:white;
+transform:scale(1.05);
+}
+
+.color-text.active{
+background:#111;
+color:white;
+border-color:#111;
+}
 /* hover نفس واتساب */
 .cart-btn:hover{
 transform:translateY(-3px) scale(1.05);
@@ -797,7 +818,10 @@ alt="banner image">
 <h4>تواصل معنا</h4>
 
 <div class="footer-links">
-
+<div style="padding:10px;text-align:center;background:#111;color:white;">
+📦 الطلبات: <span id="ordersCount">0</span> |
+💰 المجموع: <span id="salesTotal">0</span> درهم
+</div>
 <a class="social" href="https://www.instagram.com/nissrine_brand1" target="_blank">
 📸 Instagram
 </a>
@@ -814,35 +838,35 @@ alt="banner image">
 
 /* PRODUCTS */
 let products = [
-{ name:"عباية 1", price:350, img:"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg", colors:["#000","#fff"] },
+{ name:"عباية 1", price:350, img:"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg", colors:["أسود","أبيض"] },
 
-{ name:"عباية 2", price:420, img:"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg", colors:["#000","#fff"] },
+{ name:"عباية 2", price:420, img:"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg", colors:["أسود","أبيض"] },
 
-{ name:"عباية 3", price:390, img:"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg", colors:["#000","#ff4d6d"] },
+{ name:"عباية 3", price:390, img:"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg", colors:["أسود","وردي"] },
 
-{ name:"عباية 4", price:450, img:"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg", colors:["#111","#fff"] },
+{ name:"عباية 4", price:450, img:"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg", colors:["رمادي","أبيض"] },
 
-{ name:"عباية 5", price:500, img:"https://i.postimg.cc/Z5QVhrNK/fb37089c-677f-49a9-be8f-05962e1de119.jpg", colors:["#000","#ccc"] },
+{ name:"عباية 5", price:500, img:"https://i.postimg.cc/Z5QVhrNK/fb37089c-677f-49a9-be8f-05962e1de119.jpg", colors:["أسود","رمادي"] },
 
-{ name:"عباية 6", price:370, img:"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+{ name:"عباية 6", price:370, img:"https://images.unsplash.com/photo-1520975751234-6a7c1b9f1d2a?auto=format&fit=crop&w=400", colors:["أسود","وردي"] },
 
-{ name:"عباية 7", price:410, img:"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400", colors:["#000","#fff"] },
+{ name:"عباية 7", price:410, img:"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400", colors:["أبيض","رمادي"] },
 
-{ name:"عباية 8", price:460, img:"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+{ name:"عباية 8", price:460, img:"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400", colors:["أسود","أبيض"] },
 
-{ name:"عباية 9", price:480, img:"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400", colors:["#111","#fff"] },
+{ name:"عباية 9", price:480, img:"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400", colors:["رمادي","أسود"] },
 
-{ name:"عباية 10", price:520, img:"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400", colors:["#000","#ccc"] },
+{ name:"عباية 10", price:520, img:"https://images.unsplash.com/photo-1520975834567-3c4d5e6f7a8b?auto=format&fit=crop&w=400", colors:["أسود","أبيض"] },
 
-{ name:"عباية 11", price:390, img:"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+{ name:"عباية 11", price:390, img:"https://images.unsplash.com/photo-1520975845678-4d5e6f7a8b9c?auto=format&fit=crop&w=400", colors:["وردي","أبيض"] },
 
-{ name:"عباية 12", price:430, img:"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400", colors:["#000","#fff"] },
+{ name:"عباية 12", price:430, img:"https://images.unsplash.com/photo-1520975856789-5e6f7a8b9c0d?auto=format&fit=crop&w=400", colors:["أسود","رمادي"] },
 
-{ name:"عباية 13", price:470, img:"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400", colors:["#111","#fff"] },
+{ name:"عباية 13", price:470, img:"https://images.unsplash.com/photo-1520975867890-6f7a8b9c0d1e?auto=format&fit=crop&w=400", colors:["أبيض","أسود"] },
 
-{ name:"عباية 14", price:490, img:"https://images.unsplash.com/photo-1520975878901-7a8b9c0d1e2f?auto=format&fit=crop&w=400", colors:["#000","#ff4d6d"] },
+{ name:"عباية 14", price:490, img:"https://images.unsplash.com/photo-1520975878901-7a8b9c0d1e2f?auto=format&fit=crop&w=400", colors:["رمادي","وردي"] },
 
-{ name:"عباية 15", price:550, img:"https://images.unsplash.com/photo-1520975889012-8b9c0d1e2f3a?auto=format&fit=crop&w=400", colors:["#000","#fff"] }
+{ name:"عباية 15", price:550, img:"https://images.unsplash.com/photo-1520975889012-8b9c0d1e2f3a?auto=format&fit=crop&w=400", colors:["أسود","أبيض"] }
 ];
 
 let cart=[];
@@ -886,11 +910,11 @@ ${starsUI}
 
 <div class="colors-inline">
 ${p.colors.map(c=>`
-<span class="color" style="background:${c}"
-onclick="pick(${i},'${c}',this)"></span>
+<span class="color-text" onclick="pick(${i},'${c}',this)">
+${c}
+</span>
 `).join("")}
 </div>
-
 <p>${p.price} درهم</p>
 
 <button onclick="add(${i})">إضافة للسلة</button>
@@ -966,24 +990,30 @@ let html="";
 let total=0;
 
 cart.forEach((i,index)=>{
+
 html+=`
 <p style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+  
   <span>
     ${i.name}
+
     <span style="
       display:inline-block;
-      width:14px;
-      height:14px;
-      border-radius:3px;
-      background:${i.color};
-      border:1px solid #ccc;
-      vertical-align:middle;
-      margin:0 4px;
-    "></span>
+      padding:3px 10px;
+      margin:0 5px;
+      border-radius:20px;
+      font-size:11px;
+      background:#111;
+      color:white;
+    ">
+      ${i.color}
+    </span>
+
     - ${i.price} درهم
   </span>
 
   <button class="remove" onclick="cart.splice(${index},1);update()">حذف</button>
+
 </p>`;
 
 total+=i.price;
@@ -1014,14 +1044,32 @@ url:location.href
 function send(){
 
 if(cart.length === 0){
-alert("السلة فارغة 🛒");
+alert("🛒 السلة فارغة");
 return;
 }
 
-let name = document.getElementById("name").value;
-let phone = document.getElementById("phone").value;
-let address = document.getElementById("address").value;
+let name = document.getElementById("name").value.trim();
+let phone = document.getElementById("phone").value.trim();
+let address = document.getElementById("address").value.trim();
 let city = document.getElementById("city").value;
+let totalOrders = localStorage.getItem("totalOrders") || 0;
+let totalSales = localStorage.getItem("totalSales") || 0;
+
+// ✅ التحقق من المعلومات
+if(name === ""){
+alert("❌ عفاك دخل الاسم");
+return;
+}
+
+if(phone === ""){
+alert("❌ عفاك دخل رقم الهاتف");
+return;
+}
+
+if(address === ""){
+alert("❌ عفاك دخل العنوان");
+return;
+}
 
 let msg = "🛍️ طلب جديد %0A";
 msg += "----------------------%0A";
@@ -1036,6 +1084,7 @@ msg += `📞 الهاتف: ${phone} %0A`;
 msg += `📍 المدينة: ${city} %0A`;
 msg += `🏠 العنوان: ${address} %0A`;
 
+// فتح واتساب فقط إلا كلشي معمر
 window.open("https://wa.me/212614986795?text="+msg);
 }
 function add(i){
@@ -1045,7 +1094,10 @@ name:products[i].name,
 price:products[i].price,
 color:selected[i]||"بدون لون"
 });
-
+function updateStats(){
+document.getElementById("ordersCount").innerText = totalOrders;
+document.getElementById("salesTotal").innerText = totalSales;
+}
 update();
 
 /* 🔊 نفس صوت النجوم */
