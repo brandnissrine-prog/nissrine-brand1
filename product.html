@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product</title>
 
 <style>
@@ -33,6 +34,37 @@ border:2px solid transparent;
 .thumbs img.active{
 border-color:black;
 }
+
+.container{
+max-width:400px;
+margin:auto;
+background:white;
+padding:10px;
+border-radius:10px;
+}
+
+/* للهاتف */
+@media(max-width:500px){
+
+body{
+padding:10px;
+}
+
+.container{
+max-width:100%;
+}
+
+.main-img{
+height:250px;
+}
+
+.thumbs img{
+width:60px;
+height:60px;
+}
+
+}
+
 </style>
 </head>
 
