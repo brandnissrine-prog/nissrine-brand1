@@ -485,7 +485,12 @@ left:-100%;
 background:rgba(255,255,255,0.2);
 transition:0.4s;
 }
-
+.card span{
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+max-width:100px;
+}
 .card button:hover::after{
 left:100%;
 }
@@ -857,13 +862,13 @@ alt="banner image">
 let products = [
 
 {
-name:"عباية 1",
+name:"عبايات النور",
 price:350,
 images:[
 "https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
-"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
-"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg",
-"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg"
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
 ],
 colors:["أسود","أبيض","وردي","رمادي"]
 },
@@ -873,9 +878,9 @@ name:"عباية 2",
 price:420,
 images:[
 "https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
-"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
-"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg",
-"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg"
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
 ],
 colors:["أسود","أبيض","وردي","رمادي"]
 },
@@ -885,9 +890,9 @@ name:"عباية 3",
 price:390,
 images:[
 "https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg",
-"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
-"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
-"https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg"
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
 ],
 colors:["أسود","أبيض","وردي","رمادي"]
 },
@@ -897,21 +902,21 @@ name:"عباية 4",
 price:450,
 images:[
 "https://i.postimg.cc/xdXPdc2B/a04bf5b3-3c63-4a9a-8bbf-5bafb2bea4c7.jpg",
-"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
-"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
-"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg"
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
 ],
 colors:["أسود","أبيض","وردي","رمادي"]
 },
 
 {
-name:"عباية 5",
+name:"تاج الوقر",
 price:500,
 images:[
 "https://i.postimg.cc/Z5QVhrNK/fb37089c-677f-49a9-be8f-05962e1de119.jpg",
-"https://i.postimg.cc/nVDwkS6X/bab4503a-63c5-4495-b998-643c6cf76abd.jpg",
-"https://i.postimg.cc/G3GqY8yb/63f98d91-890c-40a2-a7b2-28dddc11a193.jpg",
-"https://i.postimg.cc/fTs5vzcG/f6bf99e4-a2cd-48db-b602-9ce36014c1f3.jpg"
+"https://images.unsplash.com/photo-1520975805678-9c1b7a2d3e4f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975812345-1a2b3c4d5e6f?auto=format&fit=crop&w=400",
+"https://images.unsplash.com/photo-1520975823456-2b3c4d5e6f7a?auto=format&fit=crop&w=400"
 ],
 colors:["أسود","أبيض","وردي","رمادي"]
 },
@@ -1084,7 +1089,17 @@ ${c}
 `).join("")}
 </div>
 
-<p>${p.price} درهم</p>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:0 10px;margin-top:5px;">
+  
+  <span style="font-weight:bold;font-size:14px;">
+    ${p.name}
+  </span>
+
+  <span style="color:#111;font-weight:bold;">
+    ${p.price} درهم
+  </span>
+
+</div>
 
 <!-- BUTTONS -->
 <div style="display:flex;gap:5px;justify-content:space-between;align-items:center;padding:5px 10px;">
