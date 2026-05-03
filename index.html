@@ -784,7 +784,7 @@ alt="banner image">
 <p>المجموع: <span id="total">0</span> درهم</p>
 
 <input id="name" placeholder="الاسم">
-<input id="phone" placeholder="الهاتف">
+<input id="phone" placeholder="الهاتف" maxlength="10">
 <input id="address" placeholder="العنوان">
 
 <select id="city">
@@ -1153,7 +1153,25 @@ card.querySelectorAll(".color-text, .color")
 el.classList.add("active");
 
 }
+let phoneInput = document.getElementById("phone");
 
+/* يمنع الحروف */
+phoneInput.addEventListener("input", function(){
+
+this.value = this.value.replace(/\D/g,"");
+
+/* إلا كتب شي حاجة أخرى غير 06 أو 07 */
+if(this.value.length >= 2){
+
+let start = this.value.substring(0,2);
+
+if(start !== "06" && start !== "07"){
+this.value = "";
+}
+
+}
+
+});
 function openProduct(i){
 localStorage.setItem("selectedProduct", JSON.stringify(products[i]));
 window.location.href = "product.html";
@@ -1277,59 +1295,74 @@ url:location.href
 function send(){
 
 if(cart.length === 0){
-alert("🛒 السلة فارغة");
-return;
+  alert("🛒 السلة فارغة");
+  return;
 }
 
 let name = document.getElementById("name").value.trim();
 let phone = document.getElementById("phone").value.trim();
 let address = document.getElementById("address").value.trim();
 let city = document.getElementById("city").value;
-let totalOrders = localStorage.getItem("totalOrders") || 0;
-let totalSales = localStorage.getItem("totalSales") || 0;
-let hasMissingColor = false;
 
-cart.forEach(i=>{
-if(!i.color || i.color === "بدون لون"){
-hasMissingColor = true;
+/* التحقق */
+if(name===""){
+  alert("دخل الاسم");
+  return;
 }
-});
 
-if(hasMissingColor){
-alert("❌ خاصك تختار اللون قبل ما تكمل الطلب");
-return;
-}
-// ✅ التحقق من المعلومات
-if(name === ""){
-alert("❌ عفاك دخل الاسم");
+if(!/^(06|07)\d{8}$/.test(phone)){
+alert("❌ خاص الرقم يبدا بـ 06 أو 07 ويكون 10 أرقام");
 return;
 }
 
-if(phone === ""){
-alert("❌ عفاك دخل رقم الهاتف");
-return;
+if(phone===""){
+  alert("دخل رقم الهاتف");
+  return;
 }
 
-if(address === ""){
-alert("❌ عفاك دخل العنوان");
-return;
+if(address===""){
+  alert("دخل العنوان");
+  return;
 }
 
+/* حفظ الطلب */
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let order = {
+  name:name,
+  phone:phone,
+  city:city,
+  address:address,
+  products:[...cart],
+  total: cart.reduce((sum,p)=>sum+p.price,0),
+  date:new Date().toLocaleString()
+};
+
+orders.push(order);
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+/* رسالة واتساب */
 let msg = "🛍️ طلب جديد %0A";
-msg += "----------------------%0A";
+msg += "------------------%0A";
 
 cart.forEach(i=>{
-msg += `• ${i.name} | ${i.color} | ${i.price} درهم %0A`;
+  msg += `• ${i.name} | ${i.color} | ${i.price} درهم %0A`;
 });
 
-msg += "----------------------%0A";
-msg += `👤 الاسم: ${name} %0A`;
-msg += `📞 الهاتف: ${phone} %0A`;
-msg += `📍 المدينة: ${city} %0A`;
-msg += `🏠 العنوان: ${address} %0A`;
+msg += "------------------%0A";
+msg += `👤 ${name}%0A`;
+msg += `📞 ${phone}%0A`;
+msg += `🏙 ${city}%0A`;
+msg += `🏠 ${address}%0A`;
 
-// فتح واتساب فقط إلا كلشي معمر
-window.open("https://wa.me/212614986795?text="+msg);
+/* فتح واتساب */
+window.open(
+  "https://wa.me/212614986795?text="+msg,
+  "_blank"
+);
+
+alert("✅ تسجل الطلب");
 }
 function add(i){
 
