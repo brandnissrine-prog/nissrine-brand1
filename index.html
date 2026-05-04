@@ -550,7 +550,22 @@ border-radius:10px;
 display:none;
 z-index:99999;
 }
+.admin-btn{
+background:linear-gradient(45deg,#ff9800,#ff5722);
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
 
+.admin-btn:hover{
+transform:translateY(-2px) scale(1.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.5);
+}
 /* ===== FOOTER ===== */
 .footer{
 background:#111;
@@ -732,6 +747,36 @@ transform:scale(0.95);
 </style>
 </head>
 <audio id="addSound" src="assets/button-interface.mp3" preload="auto"></audio>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "PUT_YOUR_KEY",
+  authDomain: "PUT_YOUR_DOMAIN",
+  projectId: "PUT_YOUR_ID",
+  storageBucket: "PUT_YOUR_BUCKET",
+  messagingSenderId: "PUT_YOUR_SENDER",
+  appId: "PUT_YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* 🔥 حفظ الطلب */
+window.saveOrder = async function(order){
+  await addDoc(collection(db, "orders"), order);
+}
+
+/* 🔥 جلب الطلبات */
+window.getOrders = async function(){
+  let snap = await getDocs(collection(db, "orders"));
+  let data = [];
+  snap.forEach(doc => data.push(doc.data()));
+  return data;
+}
+
+</script>
 <body>
 
 <!-- HEADER -->
@@ -836,7 +881,9 @@ alt="banner image">
 
 <!-- FOOTER -->
 <footer class="footer">
-
+<button class="social admin-footer" onclick="goAdmin()">
+⚙️ Admin
+</button>
 <h4>تواصل معنا</h4>
 
 <div class="footer-links">
@@ -1191,11 +1238,39 @@ location.reload(); // أبسط حل لإعادة التحميل
 /* ADD */
 function add(i){
 
+// ❌ إلا ما تختارش اللون
+if(!selected[i]){
+  alert("⚠️ خاصك تختار اللون قبل ما تضيف للسلة");
+  return;
+}
+
+// ✅ إلا كان اللون
 cart.push({
-name:products[i].name,
-price:products[i].price,
-color:selected[i]||"بدون لون"
+  name:products[i].name,
+  price:products[i].price,
+  color:selected[i]
 });
+
+update();
+
+/* صوت */
+let sound = document.getElementById("addSound");
+if(sound){
+  sound.currentTime = 0;
+  sound.play().catch(()=>{});
+}
+
+/* toast */
+let t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1500);
+
+/* bump */
+let c=document.getElementById("count");
+c.classList.add("bump");
+setTimeout(()=>c.classList.remove("bump"),300);
+
+}
 
 update();
 function updateCartUI(){
@@ -1217,7 +1292,7 @@ setTimeout(()=>t.style.display="none",1500);
 let c=document.getElementById("count");
 c.classList.add("bump");
 setTimeout(()=>c.classList.remove("bump"),300);
-}
+
 
 /* 🛒 CART BOUNCE */
 let cartBtn = document.querySelector(".cart-btn");
@@ -1280,15 +1355,17 @@ function toggleCart(){
 document.getElementById("cart").classList.toggle("open");
 document.body.classList.toggle("cart-open");
 }
+function goAdmin(){
 
-/* SHARE */
-function share(){
-if(navigator.share){
-navigator.share({
-title:"Store",
-url:location.href
-});
+let pass = prompt("دخل كلمة السر");
+
+if(pass === "NISSRINEISGI"){
+  localStorage.setItem("admin","true");
+  window.location.href = "admin.html";
+}else{
+  alert("❌ كلمة سر خاطئة");
 }
+
 }
 
 /* WHATSAPP */
@@ -1298,7 +1375,13 @@ if(cart.length === 0){
   alert("🛒 السلة فارغة");
   return;
 }
+// ❌ تحقق من اللون
+let hasNoColor = cart.some(item => item.color === "بدون لون");
 
+if(hasNoColor){
+  alert("⚠️ خاصك تختار اللون لجميع المنتجات قبل تأكيد الطلب");
+  return;
+}
 let name = document.getElementById("name").value.trim();
 let phone = document.getElementById("phone").value.trim();
 let address = document.getElementById("address").value.trim();
@@ -1394,7 +1477,10 @@ let c=document.getElementById("count");
 c.classList.add("bump");
 setTimeout(()=>c.classList.remove("bump"),300);
 }
+
 </script>
+
+
 <div class="help-box">
   ❓
 

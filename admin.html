@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f5f5f5;
+padding:20px;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.order{
+background:white;
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.btn{
+padding:8px 12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+margin-right:5px;
+}
+
+.done{
+background:#25D366;
+color:white;
+}
+
+.delete{
+background:red;
+color:white;
+}
+</style>
+
+</head>
+<body>
+
+<h2>لوحة الطلبات</h2>
+
+<div id="orders"></div>
+
+<script>
+
+/* 🔐 حماية */
+if(localStorage.getItem("admin") !== "true"){
+alert("❌ ممنوع الدخول");
+window.location.href="index.html";
+}
+
+/* 📦 عرض الطلبات */
+function loadOrders(){
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+let html = "";
+
+orders.forEach((o,index)=>{
+
+html += `
+<div class="order">
+
+👤 <b>${o.name}</b><br>
+📞 ${o.phone}<br>
+🏙 ${o.city}<br>
+🏠 ${o.address}<br>
+
+<hr>
+
+${o.products.map(p=>`
+• ${p.name} | ${p.color} | ${p.price} درهم
+`).join("")}
+
+<hr>
+
+💰 <b>${o.total} درهم</b>
+
+<br>
+
+<button class="btn done" onclick="completeOrder('${o.phone}','${o.name}')">
+✅ إتمام الطلب
+</button>
+
+<button class="btn delete" onclick="confirmDelete(${index})">
+❌ إلغاء الطلب
+</button>
+
+</div>
+`;
+});
+
+document.getElementById("orders").innerHTML = html;
+
+}
+
+/* 📲 إتمام الطلب + رسالة واتساب */
+function completeOrder(phone,name){
+
+// تحويل الرقم
+let num = phone.replace(/^0/, "212");
+
+// الرسالة
+let message = `مرحبا ${name}، تم طلبك بنجاح 🙏`;
+
+// تحويلها لرابط
+let encodedMsg = encodeURIComponent(message);
+
+// فتح واتساب
+window.open(
+  "https://wa.me/" + num + "?text=" + encodedMsg,
+  "_blank"
+);
+
+}
+
+/* ❌ تأكيد الحذف */
+function confirmDelete(index){
+if(confirm("واش متأكد تبغي تمسح الطلب؟")){
+  deleteOrder(index);
+}
+}
+
+/* 🗑 حذف */
+function deleteOrder(index){
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+orders.splice(index,1);
+
+localStorage.setItem("orders", JSON.stringify(orders));
+
+loadOrders();
+
+}
+
+/* 🚀 تشغيل */
+window.onload = loadOrders;
+
+</script>
+
+</body>
+</html>
