@@ -788,7 +788,9 @@ window.getOrders = async function(){
 </div>
 
 <div class="header-right">
-
+<button class="admin-btn" onclick="goAdmin()">
+⚙️ Admin
+</button>
 <a class="insta-top" href="https://www.instagram.com/nissrine_brand1?igsh=MXU1MHFpNGZzcTJjaA%3D%3D&utm_source=qr" target="_blank">
 Instagram
 </a>
@@ -881,9 +883,7 @@ alt="banner image">
 
 <!-- FOOTER -->
 <footer class="footer">
-<button class="social admin-footer" onclick="goAdmin()">
-⚙️ Admin
-</button>
+
 <h4>تواصل معنا</h4>
 
 <div class="footer-links">
@@ -1359,7 +1359,7 @@ function goAdmin(){
 
 let pass = prompt("دخل كلمة السر");
 
-if(pass === "NISSRINEISGI"){
+if(pass === "1234"){
   localStorage.setItem("admin","true");
   window.location.href = "admin.html";
 }else{
@@ -1418,13 +1418,17 @@ let order = {
   address:address,
   products:[...cart],
   total: cart.reduce((sum,p)=>sum+p.price,0),
-  date:new Date().toLocaleString()
+  createdAt: Date.now()
 };
 
 orders.push(order);
 
 localStorage.setItem("orders", JSON.stringify(orders));
+let listOrders = JSON.parse(localStorage.getItem("listOrders")) || [];
 
+listOrders.push(order);
+
+localStorage.setItem("listOrders", JSON.stringify(listOrders));
 /* رسالة واتساب */
 let msg = "🛍️ طلب جديد %0A";
 msg += "------------------%0A";
@@ -1477,7 +1481,9 @@ let c=document.getElementById("count");
 c.classList.add("bump");
 setTimeout(()=>c.classList.remove("bump"),300);
 }
-
+let listOrders = JSON.parse(localStorage.getItem("listOrders")) || [];
+listOrders.push(order);
+localStorage.setItem("listOrders", JSON.stringify(listOrders));
 </script>
 
 
