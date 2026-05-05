@@ -501,8 +501,11 @@ box-shadow:0 10px 20px rgba(0,0,0,0.3);
 background:#333;
 }
 /* زر الإغلاق */
-.close-btn{
-background:#111 !important;
+@media (max-width:768px){
+.cart-btn{
+padding:8px 12px;
+font-size:13px;
+}
 }
 
 /* زر الحذف */
@@ -794,7 +797,78 @@ box-shadow:0 10px 25px rgba(255,0,80,0.6);
 .fav-page-btn:active{
 transform:scale(0.95);
 }
+/* 📱 MOBILE */
+@media (max-width: 768px){
 
+/* header */
+header{
+flex-direction:column;
+gap:10px;
+text-align:center;
+}
+
+/* الأزرار */
+.header-right{
+flex-wrap:wrap;
+justify-content:center;
+}
+
+/* banner */
+.banner{
+height:160px;
+}
+
+.banner-text{
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+max-width:90%;
+}
+
+.banner-text h2{
+font-size:20px;
+}
+
+.banner-text p{
+font-size:14px;
+}
+
+/* products */
+.products{
+grid-template-columns:repeat(2,1fr);
+gap:8px;
+padding:8px;
+}
+
+/* card */
+.card img{
+height:140px;
+}
+
+/* buttons داخل الكارد */
+.card button{
+font-size:12px;
+padding:8px;
+}
+
+/* السلة */
+.cart{
+width:100%;
+}
+
+/* inputs */
+input, select{
+font-size:14px;
+}
+
+/* footer */
+.footer-links{
+flex-direction:column;
+gap:8px;
+}
+
+}
 </style>
 </head>
 <audio id="addSound" src="assets/button-interface.mp3" preload="auto"></audio>
@@ -1151,9 +1225,7 @@ let selected={};
 let box=document.getElementById("products");
 let ratings = JSON.parse(localStorage.getItem("ratings")) || {};
 /* تأكد أن الصفحة تحمّلات قبل العرض */
-window.onload = function(){
-renderProducts();
-};
+
 function renderProducts(){
 
 let box=document.getElementById("products");

@@ -67,6 +67,58 @@ margin-top:40px;
 font-size:18px;
 color:#777;
 }
+
+/* يخدم مزيان فالتليفون */
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+gap:10px;
+}
+
+/* الكارط */
+.card{
+width:100%;
+}
+
+/* الصور */
+.card img{
+width:100%;
+height:auto;
+}
+
+/* فالتليفون */
+@media(max-width:600px){
+
+body{
+padding:10px;
+}
+
+h2{
+font-size:18px;
+}
+
+.products{
+grid-template-columns:repeat(2,1fr);
+}
+
+button{
+width:100%;
+margin-top:5px;
+font-size:14px;
+}
+
+}
+button{
+padding:8px;
+font-size:14px;
+border-radius:8px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+}
 </style>
 </head>
 
@@ -75,7 +127,7 @@ color:#777;
 <h2>❤️ المفضلات</h2>
 
 <div class="products" id="favBox"></div>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="empty" id="emptyMsg" style="display:none;">
 😢 ما عندك حتى منتج في المفضلة
 </div>
