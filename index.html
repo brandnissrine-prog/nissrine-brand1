@@ -743,6 +743,57 @@ background:linear-gradient(45deg,#000,#222);
 .close-btn-2:active{
 transform:scale(0.95);
 }
+.fav-btn{
+position:absolute;
+top:10px;
+right:10px;
+font-size:22px;
+cursor:pointer;
+color:white;
+background:rgba(0,0,0,0.4);
+padding:5px 8px;
+border-radius:50%;
+transition:0.3s;
+}
+
+/* hover */
+.fav-btn:hover{
+color:red;
+transform:scale(1.2);
+background:rgba(0,0,0,0.6);
+}
+
+/* إلا كان محفوظ */
+.fav-btn.active{
+color:red;
+background:rgba(0,0,0,0.6);
+}
+
+.fav-page-btn{
+background:linear-gradient(45deg,#ff4d6d,#ff1e4d);
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:30px;
+cursor:pointer;
+font-weight:bold;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(255,0,80,0.4);
+}
+
+/* hover */
+.fav-page-btn:hover{
+transform:translateY(-3px) scale(1.05);
+box-shadow:0 10px 25px rgba(255,0,80,0.6);
+}
+
+/* click */
+.fav-page-btn:active{
+transform:scale(0.95);
+}
 
 </style>
 </head>
@@ -786,7 +837,9 @@ window.getOrders = async function(){
 <img src="https://i.postimg.cc/MZVhz6q2/Gemini-Generated-Image-27v39i27v39i27v3.png">
 <span>Nesrine Brand1</span>
 </div>
-
+<button class="fav-page-btn" onclick="goFav()">
+❤️ المفضلات
+</button>
 <div class="header-right">
 <button class="admin-btn" onclick="goAdmin()">
 ⚙️ Admin
@@ -868,7 +921,7 @@ alt="banner image">
 <option>خنيفرة</option>
 <option>زاكورة</option>
 </select>
-
+<button class="cart-btn" onclick="goFav()">❤️</button>
 <button class="whatsapp-btn" onclick="send()">
 📲 تأكيد الطلب عبر واتساب
 </button>
@@ -1089,6 +1142,7 @@ colors:["أسود","أبيض","وردي","رمادي"]
 }
 
 ];
+localStorage.setItem("products", JSON.stringify(products));
 let cart=[];
 let selected={};
 
@@ -1103,7 +1157,7 @@ renderProducts();
 function renderProducts(){
 
 let box=document.getElementById("products");
-if(!box) return; // حماية
+if(!box) return;
 
 box.innerHTML="";
 
@@ -1122,7 +1176,16 @@ onclick="rate(${i},${s})">★</span>
 box.innerHTML += `
 <div class="card">
 
+<div style="position:relative">
+
 <img id="main-${i}" src="${p.images[0]}" class="main-img">
+
+<!-- ❤️ HEART -->
+<span class="fav-btn ${isFav(i) ? 'active' : ''}" onclick="toggleFav(${i}, this)">
+❤
+</span>
+
+</div>
 
 <div style="margin:8px 0;font-size:18px;">
 ${starsUI}
@@ -1183,7 +1246,24 @@ cursor:pointer;
 });
 
 }
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
+function isFav(i){
+return favorites.includes(i);
+}
+
+function toggleFav(i, el){
+
+if(favorites.includes(i)){
+  favorites = favorites.filter(x => x !== i);
+  el.classList.remove("active");
+}else{
+  favorites.push(i);
+  el.classList.add("active");
+}
+
+localStorage.setItem("favorites", JSON.stringify(favorites));
+}
 /* COLOR */
 function pick(i,color,el){
 
@@ -1228,7 +1308,6 @@ function rate(productId, value){
 
 ratings[productId] = value;
 localStorage.setItem("ratings", JSON.stringify(ratings));
-
 // إعادة رسم المنتجات باش يتحدّث الشكل (ولكن بدون ما نعرض تقييم عام)
 let box = document.getElementById("products");
 box.innerHTML = "";
@@ -1359,7 +1438,7 @@ function goAdmin(){
 
 let pass = prompt("دخل كلمة السر");
 
-if(pass === "1234"){
+if(pass === "NISSRINEISGI"){
   localStorage.setItem("admin","true");
   window.location.href = "admin.html";
 }else{
@@ -1484,6 +1563,15 @@ setTimeout(()=>c.classList.remove("bump"),300);
 let listOrders = JSON.parse(localStorage.getItem("listOrders")) || [];
 listOrders.push(order);
 localStorage.setItem("listOrders", JSON.stringify(listOrders));
+
+setInterval(()=>{
+loadOrders();
+},1000);
+
+function goFav(){
+window.location.href = "favorites.html";
+}
+
 </script>
 
 

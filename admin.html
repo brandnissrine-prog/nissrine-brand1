@@ -61,14 +61,7 @@ border-radius:15px;
 margin-bottom:10px;
 box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
-.order .btn{
-display:block;
-width:100%;
-margin:5px 0;
-}
-.order{
-word-wrap:break-word;
-}
+
 /* ===== STATUS ===== */
 .status{
 display:inline-block;
@@ -131,42 +124,36 @@ border-radius:10px;
 opacity:0;
 transition:0.3s;
 }
-#dashboard{
-grid-template-columns:repeat(2,1fr);
-}
-#dashboard{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;
-}
-@media (max-width:600px){
 
-body{
-padding:10px;
+.shipped{color:orange;font-weight:bold;}
+
+.order{
+position:relative;
+padding-left:40px; /* باش يبان ❌ */
 }
 
-h2{
-font-size:18px;
+.delete-btn{
+position:absolute;
+left:5px;
+top:5px;
+background:red;
+color:white;
+border:none;
+border-radius:50%;
+width:25px;
+height:25px;
+cursor:pointer;
+font-size:14px;
 }
 
 .order{
-padding:10px;
+position:relative;
 }
 
-.card{
-padding:8px;
-font-size:14px;
-}
-
-.nav button{
-padding:8px;
-font-size:14px;
-}
-
-#searchInput{
-padding:8px;
-}
-
+.delete-btn{
+background:yellow !important;
+color:black !important;
+z-index:9999;
 }
 </style>
 </head>
@@ -176,7 +163,7 @@ padding:8px;
 <div class="nav">
 <button onclick="showOrders()">📦</button>
 <button onclick="showList()">📋</button>
-<button onclick="toggleDark()">🌙</button>
+
 </div>
 
 <h2>Admin Pro V4</h2>
@@ -184,13 +171,14 @@ padding:8px;
 <div id="dashboard"></div>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <input id="searchInput" placeholder="🔍 بحث..." onkeyup="searchOrders()">
-
+<div id="list"></div>
 <div class="filters">
 <button onclick="filterOrders('all')">الكل</button>
 <button onclick="filterOrders('new')">جديد</button>
 <button onclick="filterOrders('delivered')">مكتمل</button>
-</div>
 
+</div>
+<div id="list"></div>
 <div id="ordersSection"><div id="orders"></div></div>
 
 <div id="listSection" style="display:none;">
@@ -221,7 +209,13 @@ return "🆕 جديد";
 function loadDashboard(){
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
 let total=0,done=0;
-
+let order = {
+id: Date.now(),
+name: name,
+phone: phone,
+status: "new",
+createdAt: Date.now()
+};
 orders.forEach(o=>{
 if(o.completed){
 total+=Number(o.total)||0;
@@ -278,7 +272,7 @@ ${o.products && o.products.length > 0
 
 <button class="btn" onclick="viewOrder(${i})">👁 تفاصيل</button>
 <button class="btn" onclick="deleteOrder(${i})">❌ حذف</button>
-
+<button class="btn" onclick="addToList(${i})">📋 إضافة للائحة</button>
 </div>
 `;
 });
@@ -291,25 +285,39 @@ document.getElementById("orders").innerHTML=html;
 function loadOrders(){
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
 renderOrders(orders);
-syncList();
+syncList(); // ❌ حيدها
 loadList();
 loadDashboard();
 }
 
 /* ===== LIST ===== */
 function loadList(){
-let list=JSON.parse(localStorage.getItem("listOrders"))||[];
 
-let html="";
+let list = JSON.parse(localStorage.getItem("listOrders")) || [];
 
-list.forEach(o=>{
-html+=`
-<div class="${o.completed ? 'done':'not-done'}">
-${o.name} | ${o.phone}
-</div>`;
+let html = "";
+
+list.forEach((o, index)=>{
+
+let cls = "not-done";
+
+if(o.status === "delivered") cls = "done";
+else if(o.status === "shipped") cls = "shipped";
+
+html += `
+<div class="order ${cls}">
+
+<button class="delete-btn" onclick="deleteFromList(${index})">❌</button>
+
+👤 <b>${o.name}</b><br>
+📞 ${o.phone}
+
+</div>
+`;
+
 });
 
-simpleList.innerHTML=html;
+document.getElementById("simpleList").innerHTML = html;
 }
 
 /* ===== DELETE ===== */
@@ -317,7 +325,13 @@ function deleteOrder(i){
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
 let list=JSON.parse(localStorage.getItem("listOrders"))||[];
 
-list.push(orders[i]);
+let order = orders[i];
+
+// ✔️ يتسجل حسب الحالة ديالو
+if(!list.find(x => x.id === order.id)){
+list.push(order);
+}
+
 orders.splice(i,1);
 
 localStorage.setItem("orders",JSON.stringify(orders));
@@ -328,14 +342,32 @@ loadOrders();
 
 /* ===== STATUS ===== */
 function setStatus(i,s){
-let orders=JSON.parse(localStorage.getItem("orders"))||[];
-orders[i].status=s;
-if(s==="delivered") orders[i].completed=true;
 
-localStorage.setItem("orders",JSON.stringify(orders));
-loadOrders();
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let list = JSON.parse(localStorage.getItem("listOrders")) || [];
+
+let order = orders[i];
+
+order.status = s;
+order.completed = (s === "delivered");
+
+// إضافة
+if(s === "delivered"){
+if(!list.find(x => x.id === order.id)){
+list.push(order);
+}
 }
 
+// حذف
+else{
+list = list.filter(x => x.id !== order.id);
+}
+
+localStorage.setItem("orders", JSON.stringify(orders));
+localStorage.setItem("listOrders", JSON.stringify(list));
+
+loadOrders();
+}
 /* ===== WHATSAPP ===== */
 function openWhatsApp(phone,name,status){
 let num=phone.replace(/^0/,"212");
@@ -346,21 +378,6 @@ else msg="مرحبا";
 
 window.open("https://wa.me/"+num+"?text="+msg);
 }
-
-/* ===== SYNC ===== */
-function syncList(){
-let orders=JSON.parse(localStorage.getItem("orders"))||[];
-let list=JSON.parse(localStorage.getItem("listOrders"))||[];
-
-orders.forEach(o=>{
-if(!list.find(x=>x.phone===o.phone)){
-list.push(o);
-}
-});
-
-localStorage.setItem("listOrders",JSON.stringify(list));
-}
-
 /* ===== NAV ===== */
 function showOrders(){ordersSection.style.display="block";listSection.style.display="none";}
 function showList(){ordersSection.style.display="none";listSection.style.display="block";}
@@ -406,6 +423,124 @@ loadList();
 }
 
 }
+function closePopup(){
+document.getElementById("popup").style.display = "none";
+}
+function filterOrders(type){
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+if(type === "all"){
+renderOrders(orders);
+return;
+}
+
+// الجديد فقط (ما فيهش delivered)
+if(type === "new"){
+renderOrders(orders.filter(o => o.status === "new" || !o.status));
+}
+
+// المكتمل فقط
+if(type === "delivered"){
+renderOrders(orders.filter(o => o.status === "delivered"));
+}
+
+}
+setInterval(()=>{
+loadOrders();
+},10000);
+
+function addToList(i){
+
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let list = JSON.parse(localStorage.getItem("listOrders")) || [];
+
+let order = orders[i];
+
+// نضيف مباشرة بلا حتى شرط
+list.push(order);
+
+localStorage.setItem("listOrders", JSON.stringify(list));
+
+showToast("📋 تضيف للائحة");
+
+loadList();
+}
+function showToast(msg){
+let t = document.getElementById("toast");
+t.innerText = msg;
+t.style.opacity = 1;
+
+setTimeout(()=>{
+t.style.opacity = 0;
+},100);
+}
+
+function addToListAndRemove(button){
+
+    let order = button.closest(".order");
+
+    let list = document.getElementById("list");
+    let newItem = order.cloneNode(true);
+
+    // نحيد زر الإضافة
+    let btn = newItem.querySelector(".add-btn");
+    if(btn) btn.remove();
+
+    // نضيف ❌
+    let deleteBtn = document.createElement("button");
+    deleteBtn.innerText = "❌";
+    deleteBtn.className = "delete-btn";
+
+    deleteBtn.onclick = function(e){
+        e.stopPropagation();
+        let ok = confirm("واش باغي تمسح هاد الطلب؟");
+        if(ok){
+            newItem.remove();
+        }
+    };
+
+    newItem.appendChild(deleteBtn);
+
+    list.appendChild(newItem);
+
+    order.remove();
+}
+
+function deleteFromList(i){
+
+let list = JSON.parse(localStorage.getItem("listOrders")) || [];
+
+if(confirm("واش باغي تمسح هاد الطلب؟")){
+    list.splice(i,1);
+    localStorage.setItem("listOrders", JSON.stringify(list));
+    loadList();
+}
+
+}
+
+function searchOrders(){
+
+let value = document.getElementById("searchInput").value.toLowerCase();
+
+// ===== البحث فـ الطلبات =====
+let orders = document.querySelectorAll("#orders .order");
+
+orders.forEach(o=>{
+    let text = o.innerText.toLowerCase();
+    o.style.display = text.includes(value) ? "block" : "none";
+});
+
+// ===== البحث فـ اللائحة =====
+let list = document.querySelectorAll("#simpleList .order");
+
+list.forEach(o=>{
+    let text = o.innerText.toLowerCase();
+    o.style.display = text.includes(value) ? "block" : "none";
+});
+
+}
+
 </script>
 
 </body>
