@@ -176,7 +176,7 @@ z-index:9999;
 <button onclick="filterOrders('all')">الكل</button>
 <button onclick="filterOrders('new')">جديد</button>
 <button onclick="filterOrders('delivered')">مكتمل</button>
-
+<button onclick="goBack()">🔙 رجوع</button>
 </div>
 <div id="list"></div>
 <div id="ordersSection"><div id="orders"></div></div>
@@ -341,7 +341,7 @@ loadOrders();
 }
 
 /* ===== STATUS ===== */
-function setStatus(i,s){
+function setStatus(i, s){
 
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 let list = JSON.parse(localStorage.getItem("listOrders")) || [];
@@ -351,16 +351,18 @@ let order = orders[i];
 order.status = s;
 order.completed = (s === "delivered");
 
-// إضافة
-if(s === "delivered"){
-if(!list.find(x => x.id === order.id)){
-list.push(order);
-}
+// ===== 📲 إرسال واتساب تلقائي =====
+if(s === "confirmed" || s === "shipped" || s === "delivered"){
+    openWhatsApp(order.phone, order.name, s);
 }
 
-// حذف
-else{
-list = list.filter(x => x.id !== order.id);
+// ===== إضافة للائحة إلا تسلم =====
+if(s === "delivered"){
+    if(!list.find(x => x.id === order.id)){
+        list.push(order);
+    }
+}else{
+    list = list.filter(x => x.id !== order.id);
 }
 
 localStorage.setItem("orders", JSON.stringify(orders));
@@ -540,7 +542,9 @@ list.forEach(o=>{
 });
 
 }
-
+function goBack(){
+    window.location.href = "index.html";
+}
 </script>
 
 </body>

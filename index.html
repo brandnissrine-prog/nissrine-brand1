@@ -759,16 +759,17 @@ border-radius:50%;
 transition:0.3s;
 }
 
-/* hover */
+/* ❌ نحيدو hover كامل */
 .fav-btn:hover{
-color:red;
-transform:scale(1.2);
-background:rgba(0,0,0,0.6);
+color:#ff0000;
+transform:scale(1.15);
+background:rgba(255,255,255,0.3);
+box-shadow:0 0 10px rgba(255, 0, 0, 0.3);
 }
 
 /* إلا كان محفوظ */
 .fav-btn.active{
-color:red;
+color:white;
 background:rgba(0,0,0,0.6);
 }
 
@@ -869,6 +870,56 @@ gap:8px;
 }
 
 }
+
+.header-right{
+position:relative;
+}
+
+.admin-fixed{
+position:absolute;
+right:0;
+bottom:-40px;
+}
+
+.fav-icon{
+background:transparent;
+border:none;
+font-size:20px;
+cursor:pointer;
+padding:5px;
+border-radius:50%;
+transition:0.3s;
+color:white;
+}
+
+.fav-icon:hover{
+transform:scale(1.2);
+background:rgba(255,255,255,0.1);
+}
+
+.location-btn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#2196F3,#1976D2);
+color:white;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(33,150,243,0.4);
+margin:8px 0;
+}
+
+.location-btn:hover{
+transform:translateY(-3px) scale(1.03);
+}
+
+.location-btn:active{
+transform:scale(0.95);
+}
+
 </style>
 </head>
 <audio id="addSound" src="assets/button-interface.mp3" preload="auto"></audio>
@@ -911,16 +962,16 @@ window.getOrders = async function(){
 <img src="https://i.postimg.cc/MZVhz6q2/Gemini-Generated-Image-27v39i27v39i27v3.png">
 <span>Nesrine Brand1</span>
 </div>
-<button class="fav-page-btn" onclick="goFav()">
-❤️ المفضلات
-</button>
+
 <div class="header-right">
-<button class="admin-btn" onclick="goAdmin()">
-⚙️ Admin
-</button>
+
 <a class="insta-top" href="https://www.instagram.com/nissrine_brand1?igsh=MXU1MHFpNGZzcTJjaA%3D%3D&utm_source=qr" target="_blank">
 Instagram
 </a>
+
+<button class="fav-icon" onclick="goFav()" title="المحفوظات">
+❤️
+</button>
 
 <button class="cart-btn" onclick="toggleCart()">
 🛒 <span id="count">0</span>
@@ -959,42 +1010,20 @@ alt="banner image">
 
 <input id="name" placeholder="الاسم">
 <input id="phone" placeholder="الهاتف" maxlength="10">
-<input id="address" placeholder="العنوان">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
 
-<select id="city">
-<option>الدار البيضاء</option>
-<option>الرباط</option>
-<option>مراكش</option>
-<option>فاس</option>
-<option>طنجة</option>
-<option>أكادير</option>
-<option>مكناس</option>
-<option>وجدة</option>
-<option>تطوان</option>
-<option>القنيطرة</option>
-<option>آسفي</option>
-<option>الجديدة</option>
-<option>بني ملال</option>
-<option>خريبكة</option>
-<option>سطات</option>
-<option>ورزازات</option>
-<option>الراشيدية</option>
-<option>كلميم</option>
-<option>العيون</option>
-<option>الداخلة</option>
-<option>تازة</option>
-<option>الناظور</option>
-<option>الحسيمة</option>
-<option>العرائش</option>
-<option>الصويرة</option>
-<option>سلا</option>
-<option>تمارة</option>
-<option>المحمدية</option>
-<option>برشيد</option>
-<option>بنجرير</option>
-<option>خنيفرة</option>
-<option>زاكورة</option>
-</select>
+  <span 
+    style="font-weight:bold;font-size:14px;cursor:pointer;"
+    onclick="showDeliveryInfo()"
+  >
+    🚚 التوصيل
+  </span>
+
+  <button class="location-btn" onclick="getLocation()">
+    📍 مشاركة الموقع
+  </button>
+
+</div>
 <button class="cart-btn" onclick="goFav()">❤️</button>
 <button class="whatsapp-btn" onclick="send()">
 📲 تأكيد الطلب عبر واتساب
@@ -1002,7 +1031,8 @@ alt="banner image">
 <button class="close-btn-2" onclick="toggleCart()">
 ✖ إغلاق السلة
 </button>
-
+<input type="password" id="adminCode" placeholder="كود الأدمن">
+<button onclick="toggleCode()">👁</button>
 </div>
 
 <!-- TOAST -->
@@ -1012,7 +1042,9 @@ alt="banner image">
 <footer class="footer">
 
 <h4>تواصل معنا</h4>
-
+<button class="admin-btn" onclick="goAdmin()">
+⚙️ Admin
+</button>
 <div class="footer-links">
 <div style="padding:10px;text-align:center;background:#111;color:white;">
 📦 الطلبات: <span id="ordersCount">0</span> |
@@ -1033,6 +1065,7 @@ alt="banner image">
 <script>
 
 /* PRODUCTS */
+
 let products = [
 
 {
@@ -1236,7 +1269,7 @@ box.innerHTML="";
 products.forEach((p,i)=>{
 
 let userRate = ratings[i] || 0;
-
+let userLocation = "";
 let starsUI = "";
 for(let s=1; s<=5; s++){
 starsUI += `
@@ -1391,15 +1424,15 @@ function add(i){
 
 // ❌ إلا ما تختارش اللون
 if(!selected[i]){
-  alert("⚠️ خاصك تختار اللون قبل ما تضيف للسلة");
+  alert("⚠️ خاصك تختار اللون قبل الإضافة للسلة");
   return;
 }
 
-// ✅ إلا كان اللون
+// ✅ إضافة للسلة
 cart.push({
-  name:products[i].name,
-  price:products[i].price,
-  color:selected[i]
+  name: products[i].name,
+  price: products[i].price,
+  color: selected[i]
 });
 
 update();
@@ -1412,12 +1445,12 @@ if(sound){
 }
 
 /* toast */
-let t=document.getElementById("toast");
-t.style.display="block";
+let t = document.getElementById("toast");
+t.style.display = "block";
 setTimeout(()=>t.style.display="none",1500);
 
 /* bump */
-let c=document.getElementById("count");
+let c = document.getElementById("count");
 c.classList.add("bump");
 setTimeout(()=>c.classList.remove("bump"),300);
 
@@ -1518,7 +1551,34 @@ if(pass === "NISSRINEISGI"){
 }
 
 }
+function getLocation(){
 
+if(!navigator.geolocation){
+  alert("❌ المتصفح ما كيدعمش الموقع");
+  return;
+}
+
+navigator.geolocation.getCurrentPosition(
+
+(position)=>{
+
+let lat = position.coords.latitude;
+let lng = position.coords.longitude;
+
+userLocation =
+`https://www.google.com/maps?q=${lat},${lng}`;
+
+alert("✅ تم تحديد الموقع بنجاح");
+
+},
+
+()=>{
+  alert("❌ خاصك تسمح بالموقع");
+}
+
+);
+
+}
 /* WHATSAPP */
 function send(){
 
@@ -1526,124 +1586,60 @@ if(cart.length === 0){
   alert("🛒 السلة فارغة");
   return;
 }
-// ❌ تحقق من اللون
-let hasNoColor = cart.some(item => item.color === "بدون لون");
 
-if(hasNoColor){
-  alert("⚠️ خاصك تختار اللون لجميع المنتجات قبل تأكيد الطلب");
-  return;
-}
 let name = document.getElementById("name").value.trim();
 let phone = document.getElementById("phone").value.trim();
-let address = document.getElementById("address").value.trim();
-let city = document.getElementById("city").value;
 
-/* التحقق */
-if(name===""){
+if(name === ""){
   alert("دخل الاسم");
   return;
 }
 
 if(!/^(06|07)\d{8}$/.test(phone)){
-alert("❌ خاص الرقم يبدا بـ 06 أو 07 ويكون 10 أرقام");
-return;
-}
-
-if(phone===""){
-  alert("دخل رقم الهاتف");
+  alert("❌ رقم الهاتف خاصو يبدا بـ 06 أو 07");
   return;
 }
 
-if(address===""){
-  alert("دخل العنوان");
+/* 📍 الموقع */
+if(!userLocation){
+  alert("📍 خاصك تضغط على مشاركة الموقع");
   return;
 }
 
-/* حفظ الطلب */
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
-
-let order = {
-  name:name,
-  phone:phone,
-  city:city,
-  address:address,
-  products:[...cart],
-  total: cart.reduce((sum,p)=>sum+p.price,0),
-  createdAt: Date.now()
-};
-
-orders.push(order);
-
-localStorage.setItem("orders", JSON.stringify(orders));
-let listOrders = JSON.parse(localStorage.getItem("listOrders")) || [];
-
-listOrders.push(order);
-
-localStorage.setItem("listOrders", JSON.stringify(listOrders));
 /* رسالة واتساب */
-let msg = "🛍️ طلب جديد %0A";
-msg += "------------------%0A";
+let msg = "";
+msg += "🛍️ طلب جديد\n";
+msg += "------------------\n";
 
 cart.forEach(i=>{
-  msg += `• ${i.name} | ${i.color} | ${i.price} درهم %0A`;
+  msg += `• ${i.name} | ${i.color} | ${i.price} درهم\n`;
 });
 
-msg += "------------------%0A";
-msg += `👤 ${name}%0A`;
-msg += `📞 ${phone}%0A`;
-msg += `🏙 ${city}%0A`;
-msg += `🏠 ${address}%0A`;
+msg += "------------------\n";
+msg += `👤 ${name}\n`;
+msg += `📞 ${phone}\n`;
+msg += `📍 الموقع:\n${userLocation}`;
+msg += "------------------\n";
+msg += `💰 المجموع: ${total} درهم\n`;
+/* 🔥 فتح واتساب */
+let url = "https://wa.me/212614986795?text=" + encodeURIComponent(msg);
 
-/* فتح واتساب */
-window.open(
-  "https://wa.me/212614986795?text="+msg,
-  "_blank"
-);
+window.location.href = url;
 
-alert("✅ تسجل الطلب");
 }
-function add(i){
-
-cart.push({
-name:products[i].name,
-price:products[i].price,
-color:selected[i]||"بدون لون"
-});
-function updateStats(){
-document.getElementById("ordersCount").innerText = totalOrders;
-document.getElementById("salesTotal").innerText = totalSales;
-}
-update();
-
-/* 🔊 نفس صوت النجوم */
-let sound = document.getElementById("addSound");
-if(sound){
-sound.currentTime = 0;
-sound.play().catch(()=>{});
-}
-
-/* toast */
-let t=document.getElementById("toast");
-t.style.display="block";
-setTimeout(()=>t.style.display="none",1500);
-
-/* bump */
-let c=document.getElementById("count");
-c.classList.add("bump");
-setTimeout(()=>c.classList.remove("bump"),300);
-}
-let listOrders = JSON.parse(localStorage.getItem("listOrders")) || [];
-listOrders.push(order);
-localStorage.setItem("listOrders", JSON.stringify(listOrders));
-
-setInterval(()=>{
-loadOrders();
-},1000);
-
 function goFav(){
 window.location.href = "favorites.html";
 }
+let userLocation = "";
+let total = 0;
 
+cart.forEach(i=>{
+  msg += `• ${i.name} | ${i.color} | ${i.price} درهم\n`;
+  total += i.price;
+});
+function showDeliveryInfo(){
+  alert("🚚 التوصيل يكون بدفع من طرفكم ونحن غير مسؤولون عن ثمن التوصيل");
+}
 </script>
 
 
